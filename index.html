@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<title>Photo Search</title>
+		
+		<link href="search.css" rel="stylesheet">
+		
+	    <script src="SDK/lib/axios/dist/axios.standalone.js"></script>
+	    <script src="SDK/lib/CryptoJS/rollups/hmac-sha256.js"></script>
+	    <script src="SDK/lib/CryptoJS/rollups/sha256.js"></script>
+	    <script src="SDK/lib/CryptoJS/components/hmac.js"></script>
+	    <script src="SDK/lib/CryptoJS/components/enc-base64.js"></script>
+	    <script src="SDK/lib/url-template/url-template.js"></script>
+	    <script src="SDK/lib/apiGatewayCore/sigV4Client.js"></script>
+	    <script src="SDK/lib/apiGatewayCore/apiGatewayClient.js"></script>
+	    <script src="SDK/lib/apiGatewayCore/simpleHttpClient.js"></script>
+	    <script src="SDK/lib/apiGatewayCore/utils.js"></script>
+	    <script src="SDK/apigClient.js"></script>
+	</head>
+	<body>
+		<div class="search" id="search">
+			<form method="GET" id="searchBarForm">
+				<div class="searchBarBorder">
+					<div class="searchBarContainer">
+						<input class="searchBar" id="Input" value="" autofocus/>
+						<img class="micIcon" src="mic_icon.png" alt="mic icon" id="microphone">
+					</div>
+				</div>
+			</form>
+			<div class="uploadModal" id="uploadModal">
+				<div class="modalContent">
+					<input type="file" accept=".jpg, .jpeg, .png" id="fileInput">
+					<button id="modalSubmitButton" type="submit"> Submit </button>
+					<button id="modalCancelButton"> Cancel </button>
+				</div>
+			</div>
+		</div>
+		<div class="buttonContainer">
+			<button class="upload" id="uploadButton"> Upload A File</button>
+		</div>
+		<div class="images" id="imageContainer">
+			<div class="rowContainer"></div>
+		</div>
+		<script>
+			var sdk = apigClientFactory.newClient({
+				apiKey: "l7hLc5Gjg67iNUs50xDuu92QmOtg7EEM3IhnIAvX"
+			});
+			
+			function modifyString(string) {
+				var stripped = string.replace(" .", "")
+				var output = stripped.toLowerCase()
+				return output;
+			}
+		</script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script src="https://sdk.amazonaws.com/js/aws-sdk-2.1197.0.min.js"></script>
+		<script src="bundle.js"></script>
+	</body>
+</html>
