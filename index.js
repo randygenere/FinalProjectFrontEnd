@@ -24,6 +24,7 @@ $(document).ready(function() {
 	$cancelButton = $("#modalCancelButton")
 	$submitButton = $("#modalSubmitButton")
 	$fileInput = $("#fileInput")
+	$labels = $("#photoLabels")
 	
 	$micIcon = $("#microphone")
 	var micIconClicked = false
@@ -33,29 +34,12 @@ $(document).ready(function() {
 	})
 	
 	$submitButton.click(function() {
-		if (uploadedFile !== "") {
-		  	// if (file.type && !file.type.startsWith('image/')) {
-// 		    	console.log('File is not an image.', file.type, file);
-// 		    	return;
-// 		  	}
-			
+		if (uploadedFile !== "") {			
 		  	const reader = new FileReader();
 		  	reader.addEventListener('load', (event) => {
 		    	console.log(event)
-	// 			data = new Buffer(event.target.result, "binary")
-	// 			console.log(data)
 				data = event.target.result
 				base64Data = new Buffer.from(data.replace(/^data:image\/\w+;base64,/, ""), 'base64');
-			
-		
-				// const params = {
-	// 				Bucket: "storagebucket17",
-	// 				Key: fileName,
-	// 				Body: new Buffer.from(event.target.result.replace(/^data:image\/\w+;base64,/, ""), 'base64'),
-	// 				ContentEncoding: 'base64',
-	// 				ContentType: fileType
-	// 			}
-	// 			s3.upload(params)
 		  	});
 		  	reader.readAsDataURL(uploadedFile);
 			
@@ -242,21 +226,38 @@ $(document).ready(function() {
 	
 	function uploadImage(file) {
 		var s3 = new AWS.S3(credentials);
-
-		var params = {
-			Body: file,
-			Bucket: "storagebucket17",
-			Key: uploadedFile.name
+		
+		if ($labels.val() == "") {
+			var params = {
+				Body: file,
+				Bucket: "storagebucket17",
+				Key: uploadedFile.name
+			}
+		}
+		else {
+			var params = {
+				Body: file,
+				Bucket: "storagebucket17",
+				Key: uploadedFile.name,
+				Metadata: {
+					"customlabels": $labels.val()
+				}
+			}
 		}
 
 		s3.putObject(params, function(err, data) {
 		   	if (err) {
 				console.log(err, err.stack);
 				alert("Could not upload image. Please try again.")
+				$fileInput.val("")
+				$labels.val("")
 			}
 		   	else {
 				console.log(data);
 				alert("Successfuly uploaded image!")
+				$fileInput.val("")
+				$labels.val("")
+				$uploadModal.css("visibility", "hidden")
 		   	}
 		 });
 	}
